@@ -168,14 +168,17 @@ QLabel#lbl_title {
     qproperty-alignment: 'AlignCenter'; /* Выравнивание текста строго по центру */
     background: transparent;
 }
-</string>
+
+QPushButton#btn_hint{
+    text-align: center;
+}</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_14">
     <item>
      <widget class="QStackedWidget" name="screen_manager">
       <property name="currentIndex">
-       <number>3</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="title_page">
        <layout class="QVBoxLayout" name="verticalLayout_6">
