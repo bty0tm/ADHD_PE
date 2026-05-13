@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1076</width>
+    <width>1267</width>
     <height>874</height>
    </rect>
   </property>
@@ -171,6 +171,22 @@ QLabel#lbl_title {
 
 QPushButton#btn_hint{
     text-align: center;
+}
+
+QLabel#title_name{
+	qproperty-alignment: 'AlignCenter'
+}
+
+QPushButton#btn_stop_focus{
+    text-align: center;
+}
+
+QLabel#label_2{
+	qproperty-alignment: 'AlignCenter'
+}
+
+QLabel#label_3{
+	qproperty-alignment: 'AlignCenter'
 }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -178,7 +194,7 @@ QPushButton#btn_hint{
     <item>
      <widget class="QStackedWidget" name="screen_manager">
       <property name="currentIndex">
-       <number>2</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="title_page">
        <layout class="QVBoxLayout" name="verticalLayout_6">
@@ -450,7 +466,7 @@ QPushButton#btn_hint{
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>1020</width>
+                <width>1211</width>
                 <height>500</height>
                </rect>
               </property>
@@ -580,7 +596,7 @@ QPushButton#btn_hint{
               <item>
                <widget class="QPushButton" name="btn_save_time">
                 <property name="text">
-                 <string>&lt;- К генерации задач</string>
+                 <string>⭠ К генерации задач</string>
                 </property>
                </widget>
               </item>
@@ -792,7 +808,7 @@ QPushButton#btn_hint{
            <item>
             <widget class="QPushButton" name="btn_stop_focus">
              <property name="text">
-              <string>Принудительно завершить фокусировку</string>
+              <string>   ⭠ Принудительно завершить фокусировку</string>
              </property>
             </widget>
            </item>
