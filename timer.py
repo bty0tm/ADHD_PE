@@ -6,12 +6,10 @@ class Timer:
         self.break_duration = break_mins * 60
 
     def set_durations(self, work_mins, break_mins):
-        """Обновляет настройки времени"""
         self.work_duration = int(work_mins) * 60
         self.break_duration = int(break_mins) * 60
 
     def play_sound(self, event_type):
-        """Звуковые оповещения"""
         if event_type == "work_start":
             winsound.Beep(1000, 400)
         elif event_type == "break_start":

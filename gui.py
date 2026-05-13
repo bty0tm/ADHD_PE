@@ -8,44 +8,40 @@ from backend import ADHD_Backend
 from timer import Timer
 
 
-class MatchaApp:
+class App:
     def __init__(self):
-        # 1. Шрифты и Интерфейс
+
+        # Подключение шрифта, шаблона интерфейса, смена имени, включение начального экрана
         QFontDatabase.addApplicationFont("Intro.otf")
         loader = QUiLoader()
         self.ui = loader.load("focus.ui")
         self.ui.setWindowTitle("Green Focus App 🌿")
         self.ui.screen_manager.setCurrentIndex(0)
 
-        # 2. Инициализация логики
-        self.engine = ADHD_Backend()  # Мозг
-        self.timer_logic = Timer()  # Двигатель
-
+        # Подключение логики и отдельно таймера
+        self.engine = ADHD_Backend()
+        self.timer_logic = Timer()
         self.current_task_index = 0
         self.time_left = 0
         self.is_break = False
 
-        # 3. GUI Таймер (Пульс приложения)
+        # Отдельный таймер интерфейса
         self.gui_timer = QTimer(self.ui)
         self.gui_timer.timeout.connect(self.hidden_timer_tick)
 
-        # 4. Настройка полей ввода
+        # Подключение кнопок и полей ввода
         self.setup_ui_elements()
-
-        # 5. Привязка кнопок
         self.setup_connections()
 
+    # Настройка для окна с выбором времени. Значения от 1 до 99, только числа, изначально поставлены 25 и 5 минут
     def setup_ui_elements(self):
         validator = QIntValidator(1, 99, self.ui)
         self.ui.input_work.setValidator(validator)
         self.ui.input_break.setValidator(validator)
         self.ui.input_work.setText("25")
         self.ui.input_break.setText("5")
-        # Центрирование текста
-        for lbl in [self.ui.label_2, self.ui.label_3, self.ui.title_name,
-                    self.ui.input_work, self.ui.input_break]:
-            lbl.setAlignment(Qt.AlignCenter)
 
+    # Настройка на действия всех кнопок
     def setup_connections(self):
         self.ui.btn_start_app.clicked.connect(lambda: self.ui.screen_manager.setCurrentIndex(1))
         self.ui.btn_back.clicked.connect(lambda: self.ui.screen_manager.setCurrentIndex(0))
@@ -56,6 +52,7 @@ class MatchaApp:
         self.ui.btn_start_focus.clicked.connect(self.start_focus_session)
         self.ui.btn_stop_focus.clicked.connect(self.stop_focus_session)
 
+    # Подсказка, какое время пользователю выбрать
     def show_time_hint(self):
         msg = QMessageBox(self.ui)
         msg.setWindowTitle("Советы 🌿")
@@ -94,31 +91,25 @@ class MatchaApp:
                 """)
         msg.exec()
 
+    # Отрисовка скроллбара с задачами
     def generate_tasks(self):
         task_text = self.ui.task_input.text()
         if not task_text.strip(): return
 
         work_mins = int(self.ui.input_work.text() or 25)
 
-        # 1. Сначала отключаем кнопку и чистим старые задачи
         self.ui.btn_generate.setEnabled(False)
         self.clear_tasks_layout()
 
-        # 2. ВОТ ОНА! Добавляем надпись об ожидании
         temp_lbl = QLabel("НЕЙРОСЕТЬ СОСТАВЛЯЕТ ПЛАН... ૮ ˶• ༝ •˶ა")
         temp_lbl.setAlignment(Qt.AlignCenter)
-        # Можно добавить немного стиля прямо здесь, если хочешь
         temp_lbl.setStyleSheet("color: #3d2500;")
         self.ui.tasks_layout.addWidget(temp_lbl)
 
-        # 3. КРИТИЧНО: Заставляем Qt перерисовать интерфейс ПРЯМО СЕЙЧАС
-        # Без этой строчки надпись появится только КОГДА нейросеть уже ответит
         QApplication.processEvents()
 
-        # 4. Запускаем ИИ
         success, tasks = self.engine.generate_initial_plan(task_text, work_mins)
 
-        # 5. Убираем надпись "думает" (чистим слой перед выводом реальных задач)
         self.clear_tasks_layout()
 
         if success:
@@ -135,7 +126,7 @@ class MatchaApp:
             if child.widget(): child.widget().deleteLater()
 
     def start_focus_session(self):
-        # Синхронизируем время перед стартом
+
         self.timer_logic.set_durations(self.ui.input_work.text(), self.ui.input_break.text())
 
         self.current_task_index = 0
@@ -176,7 +167,7 @@ class MatchaApp:
             status = f"ОТДЫХ\n{time_str}"
         else:
             task = self.engine.subtasks_list[self.current_task_index] if self.current_task_index < len(
-                self.engine.subtasks_list) else "..."
+                self.engine.subtasks_list) else "Выполнение собственного плана"
             status = f"В ФОКУСЕ:\n{task}\n\n⏱ {time_str}"
         self.ui.lbl_timer_display.setText(status)
 
@@ -194,6 +185,6 @@ class MatchaApp:
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    window = MatchaApp()
+    window = App()
     window.ui.show()
     sys.exit(app.exec())
